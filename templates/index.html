@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Filing Date Calculator</title>
+    <title>PD 5.3 Hearing Date Calculator</title>
     <style>
         #calendar-image {
             max-width: 100%;
@@ -13,17 +13,22 @@
     </style>
 </head>
 <body>
-    <h1>Filing Date Calculator</h1>
+    <h1>PD 5.3 Hearing Date Calculator</h1>
     <form id="dateForm">
-        <label for="start_date">Start Date:</label>
-        <input type="date" id="start_date" name="start_date" required>
+        <label for="hearing_date">Hearing Date:</label>
+        <input type="date" id="hearing_date" name="hearing_date" required>
         <br>
-        <label for="days_to_add">Days to Add:</label>
-        <input type="number" id="days_to_add" name="days_to_add" required>
+        <label for="days_before">Step to be taken:</label>
+        <select id="days_before" name="days_before" required>
+            <option value="7">7 days (Bundle of Authorities, Core Bundle)</option>
+            <option value="14">14 days (Skeleton Arguments)</option>
+            <option value="21">21 days (Respondent's Notice)</option>
+            <option value="28">28 days (Notice of Appeal)</option>
+        </select>
         <br>
         <button type="submit">Calculate</button>
     </form>
-    <h2>Filing Date: <span id="result"></span></h2>
+    <h2>Filing Deadline: <span id="result"></span></h2>
     <div id="calendar-container">
         <img id="calendar-image" src="" alt="Calendar">
     </div>
@@ -32,14 +37,14 @@
         // Set the default date to today
         document.addEventListener('DOMContentLoaded', function() {
             const today = new Date().toISOString().split('T')[0];
-            document.getElementById('start_date').value = today;
+            document.getElementById('hearing_date').value = today;
         });
 
         // Handle form submission
         document.getElementById('dateForm').addEventListener('submit', function(event) {
             event.preventDefault();
-            const startDate = document.getElementById('start_date').value;
-            const daysToAdd = document.getElementById('days_to_add').value;
+            const hearingDate = document.getElementById('hearing_date').value;
+            const daysBefore = document.getElementById('days_before').value;
 
             fetch('/calculate', {
                 method: 'POST',
@@ -47,13 +52,13 @@
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    start_date: startDate,
-                    days_to_add: daysToAdd
+                    hearing_date: hearingDate,
+                    days_before: daysBefore
                 }),
             })
             .then(response => response.json())
             .then(data => {
-                document.getElementById('result').textContent = data.filing_date;
+                document.getElementById('result').textContent = data.filing_deadline;
                 document.getElementById('calendar-image').src = data.calendar_image;
             });
         });
