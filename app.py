@@ -27,11 +27,23 @@ def is_public_holiday(date):
     return date.strftime("%Y-%m-%d") in public_holidays
 
 def calculate_filing_deadline(hearing_date, hours_before):
+    """
+    Calculate the filing deadline by subtracting the specified hours before the hearing date,
+    excluding Saturdays, Sundays, and public holidays.
+    If the hearing date is a public holiday or weekend, adjust it to the last working day.
+    """
+    # Adjust hearing date if it falls on a weekend or public holiday
+    while is_weekend(hearing_date) or is_public_holiday(hearing_date):
+        hearing_date -= timedelta(days=1)
+
     current_date = hearing_date
     hours_remaining = int(hours_before)
 
     while hours_remaining > 0:
+        # Subtract one hour
         current_date -= timedelta(hours=1)
+
+        # Check if the current date is a weekend or public holiday
         if not is_weekend(current_date) and not is_public_holiday(current_date):
             hours_remaining -= 1
 
