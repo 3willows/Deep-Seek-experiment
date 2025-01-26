@@ -88,9 +88,11 @@ def calculate():
     with open(image_path, 'wb') as f:
         f.write(calendar_image.getvalue())
 
+    # Add a timestamp to the image URL to prevent caching
+    timestamp = int(datetime.timestamp(datetime.now()))
     return jsonify({
         'filing_date': filing_date.strftime('%Y-%m-%d'),
-        'calendar_image': f"/static/{image_filename}"
+        'calendar_image': f"/static/{image_filename}?t={timestamp}"
     })
 
 if __name__ == '__main__':
