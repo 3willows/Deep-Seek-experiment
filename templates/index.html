@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Filing Date Calculator</title>
+    <style>
+        #calendar-image {
+            max-width: 100%;
+            height: auto;
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
     <h1>Filing Date Calculator</h1>
@@ -17,6 +24,9 @@
         <button type="submit">Calculate</button>
     </form>
     <h2>Filing Date: <span id="result"></span></h2>
+    <div id="calendar-container">
+        <img id="calendar-image" src="" alt="Calendar">
+    </div>
 
     <script>
         // Set the default date to today
@@ -44,6 +54,7 @@
             .then(response => response.json())
             .then(data => {
                 document.getElementById('result').textContent = data.filing_date;
+                document.getElementById('calendar-image').src = data.calendar_image;
             });
         });
     </script>
