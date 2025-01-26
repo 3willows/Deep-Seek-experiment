@@ -27,7 +27,6 @@
         </select>
         <br>
         <button type="submit">Calculate
-            <span class="spinner"></span>
         </button>
     </form>
     <h2>Filing Deadline: <span id="result"></span></h2>
@@ -64,6 +63,14 @@
         // Handle form submission
         document.getElementById('dateForm').addEventListener('submit', function (event) {
             event.preventDefault();
+
+            // Get the submit button
+            const submitButton = document.querySelector('#dateForm button[type="submit"]');
+
+            // Disable the button and change its text to "Loading..."
+            submitButton.textContent = 'Loading...';
+            submitButton.disabled = true;
+
             const hearingDate = document.getElementById('hearing_date').value;
             const hoursBefore = document.getElementById('party_type').value;
 
@@ -93,6 +100,14 @@
                     const calendarImage = document.getElementById('calendar-image');
                     calendarImage.src = data.calendar_image;
                     calendarImage.style.display = 'block'; // Show the calendar image
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                })
+                .finally(() => {
+                    // Re-enable the button and restore its text to "Calculate"
+                    submitButton.textContent = 'Calculate';
+                    submitButton.disabled = false;
                 });
         });
     </script>
