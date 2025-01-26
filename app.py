@@ -26,14 +26,14 @@ def is_weekend(date):
 def is_public_holiday(date):
     return date.strftime("%Y-%m-%d") in public_holidays
 
-def calculate_filing_deadline(hearing_date, days_before):
+def calculate_filing_deadline(hearing_date, hours_before):
     current_date = hearing_date
-    subtracted_days = 0
+    hours_remaining = int(hours_before)
 
-    while subtracted_days < days_before:
-        current_date -= timedelta(days=1)
+    while hours_remaining > 0:
+        current_date -= timedelta(hours=1)
         if not is_weekend(current_date) and not is_public_holiday(current_date):
-            subtracted_days += 1
+            hours_remaining -= 1
 
     return current_date
 
@@ -95,6 +95,7 @@ def generate_calendar_image(hearing_date, filing_deadline):
     plt.close(fig)
     buf.seek(0)
     return buf
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -103,9 +104,9 @@ def index():
 def calculate():
     data = request.json
     hearing_date = datetime.strptime(data['hearing_date'], '%Y-%m-%d')
-    days_before = int(data['days_before'])
+    hours_before = int(data['hours_before'])
 
-    filing_deadline = calculate_filing_deadline(hearing_date, days_before)
+    filing_deadline = calculate_filing_deadline(hearing_date, hours_before)
 
     # Generate the calendar image
     calendar_image = generate_calendar_image(hearing_date, filing_deadline)
@@ -119,7 +120,7 @@ def calculate():
     # Add a timestamp to the image URL to prevent caching
     timestamp = int(datetime.timestamp(datetime.now()))
     return jsonify({
-        'filing_deadline': filing_deadline.strftime('%Y-%m-%d'),
+        'filing_deadline': filing_deadline.strftime('%Y-%m-%d %H:%M:%S'),
         'calendar_image': f"/static/{image_filename}?t={timestamp}"
     })
 

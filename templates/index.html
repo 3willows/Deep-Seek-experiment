@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PD 5.3 Hearing Date Calculator</title>
+    <title>PD 5.4 Filing Deadline Calculator</title>
     <style>
         #calendar-image {
             max-width: 100%;
@@ -13,17 +13,15 @@
     </style>
 </head>
 <body>
-    <h1>PD 5.3 Hearing Date Calculator</h1>
+    <h1>PD 5.4 Filing Deadline Calculator</h1>
     <form id="dateForm">
         <label for="hearing_date">Hearing Date:</label>
         <input type="date" id="hearing_date" name="hearing_date" required>
         <br>
-        <label for="days_before">Step to be taken:</label>
-        <select id="days_before" name="days_before" required>
-            <option value="7">7 days (Bundle of Authorities, Core Bundle)</option>
-            <option value="14">14 days (Skeleton Arguments)</option>
-            <option value="21">21 days (Respondent's Notice)</option>
-            <option value="28">28 days (Notice of Appeal)</option>
+        <label for="party_type">Party Type:</label>
+        <select id="party_type" name="party_type" required>
+            <option value="72">Applicant/Appellant (72 hours before hearing)</option>
+            <option value="48">Respondent (48 hours before hearing)</option>
         </select>
         <br>
         <button type="submit">Calculate</button>
@@ -44,7 +42,7 @@
         document.getElementById('dateForm').addEventListener('submit', function(event) {
             event.preventDefault();
             const hearingDate = document.getElementById('hearing_date').value;
-            const daysBefore = document.getElementById('days_before').value;
+            const hoursBefore = document.getElementById('party_type').value;
 
             fetch('/calculate', {
                 method: 'POST',
@@ -53,7 +51,7 @@
                 },
                 body: JSON.stringify({
                     hearing_date: hearingDate,
-                    days_before: daysBefore
+                    hours_before: hoursBefore
                 }),
             })
             .then(response => response.json())
