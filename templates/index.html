@@ -1,16 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PD 5.4 Filing Deadline Calculator</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"></head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
 <body>
     <!-- Dark/Light Mode Toggle Button -->
     <button class="theme-toggle" onclick="toggleTheme()">Toggle Dark Mode</button>
 
     <h1>PD 5.4 Filing Deadline Calculator</h1>
-    <p>Source: <a href="https://legalref.judiciary.hk/lrs/common/pd/pdcontent.jsp?pdn=PD5.4.htm&lang=EN">Judiciary website</a></p>
+    <p>Source: <a href="https://legalref.judiciary.hk/lrs/common/pd/pdcontent.jsp?pdn=PD5.4.htm&lang=EN">Judiciary
+            website</a></p>
     <form id="dateForm">
         <label for="hearing_date">Hearing Date:</label>
         <input type="date" id="hearing_date" name="hearing_date" required>
@@ -30,40 +34,9 @@
 
     <script>
         // Set the default date to today
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('hearing_date').value = today;
-        });
-
-        // Handle form submission
-        document.getElementById('dateForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const hearingDate = document.getElementById('hearing_date').value;
-            const hoursBefore = document.getElementById('party_type').value;
-
-            fetch('/calculate', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    hearing_date: hearingDate,
-                    hours_before: hoursBefore
-                }),
-            })
-            .then(response => response.json())
-            .then(data => {
-                // Format the date as "28 January 2025 (Tuesday)"
-                const deadlineDate = new Date(data.filing_deadline);
-                const formattedDate = deadlineDate.toLocaleDateString('en-GB', {
-                    day: 'numeric',
-                    month: 'long',
-                    year: 'numeric',
-                    weekday: 'long'
-                });
-                document.getElementById('result').textContent = formattedDate;
-                document.getElementById('calendar-image').src = data.calendar_image;
-            });
         });
 
         // Dark/Light Mode Toggle
@@ -84,6 +57,42 @@
         if (savedTheme === 'dark') {
             document.body.setAttribute('data-theme', 'dark');
         }
+        
+        // Handle form submission
+        document.getElementById('dateForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+            const hearingDate = document.getElementById('hearing_date').value;
+            const hoursBefore = document.getElementById('party_type').value;
+
+            fetch('/calculate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    hearing_date: hearingDate,
+                    hours_before: hoursBefore
+                }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // Format the date as "28 January 2025 (Tuesday)"
+                    const deadlineDate = new Date(data.filing_deadline);
+                    const formattedDate = deadlineDate.toLocaleDateString('en-GB', {
+                        day: 'numeric',
+                        month: 'long',
+                        year: 'numeric',
+                        weekday: 'long'
+                    });
+                    document.getElementById('result').textContent = formattedDate;
+
+                    // Show the calendar image
+                    const calendarImage = document.getElementById('calendar-image');
+                    calendarImage.src = data.calendar_image;
+                    calendarImage.style.display = 'block'; // Show the calendar image
+                });
+        });
     </script>
 </body>
+
 </html>

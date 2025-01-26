@@ -98,3 +98,12 @@ button:hover {
 .theme-toggle:hover {
   background-color: var(--accent-color);
 }
+
+#calendar-image {
+  max-width: 100%;
+  height: auto;
+  margin-top: 20px;
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  display: none; /* Hide the calendar image initially */
+}
