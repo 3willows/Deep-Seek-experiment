@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: flask-interlocutory-calendar-app
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    ignore:
+      - README.md
+      - .gitignore
