@@ -13,7 +13,8 @@
     <button class="theme-toggle" onclick="toggleTheme()">Toggle Dark Mode</button>
 
     <h1>PD 5.4 Filing Deadline Calculator</h1>
-    <p>Source: <a href="https://legalref.judiciary.hk/lrs/common/pd/pdcontent.jsp?pdn=PD5.4.htm&lang=EN">Judiciary
+    <p>Source: <a href="https://legalref.judiciary.hk/lrs/common/pd/pdcontent.jsp?pdn=PD5.4.htm&lang=EN"
+            target="_blank">Judiciary
             website</a></p>
     <form id="dateForm">
         <label for="hearing_date">Hearing Date:</label>
@@ -57,7 +58,7 @@
         if (savedTheme === 'dark') {
             document.body.setAttribute('data-theme', 'dark');
         }
-        
+
         // Handle form submission
         document.getElementById('dateForm').addEventListener('submit', function (event) {
             event.preventDefault();
