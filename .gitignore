@@ -1,1 +1,29 @@
-/static/
+# Ignore the static folder
+/static/calendar_*.png
+
+# Ignore Python compiled files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore environment files
+.env
+venv/
+env/
+
+# Ignore IDE-specific files
+.vscode/
+.idea/
+
+# Ignore macOS system files
+.DS_Store
+
+# Ignore log files
+*.log
+
+# Ignore Flask cache
+instance/
+
+# Ignore Matplotlib cache
+.matplotlib/

@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import io
 import calendar
 import os
+import time
 
 app = Flask(__name__)
 
@@ -48,6 +49,20 @@ def calculate_filing_deadline(hearing_date, hours_before):
             hours_remaining -= 1
 
     return current_date
+
+def cleanup_old_files():
+    """
+    Delete files in the static folder that are older than 1 hour.
+    """
+    static_folder = os.path.join(app.root_path, 'static')
+    now = time.time()
+    for filename in os.listdir(static_folder):
+        file_path = os.path.join(static_folder, filename)
+        if os.path.isfile(file_path):
+            file_age = now - os.path.getmtime(file_path)
+            if file_age > 3600:  # Delete files older than 1 hour
+                os.remove(file_path)
+                print(f"Deleted old file: {filename}")
 
 def generate_calendar_image(hearing_date, filing_deadline):
     # Create a figure to hold multiple subplots (one for each month)
@@ -135,6 +150,14 @@ def calculate():
         'filing_deadline': filing_deadline.strftime('%Y-%m-%d %H:%M:%S'),
         'calendar_image': f"/static/{image_filename}?t={timestamp}"
     })
+
+@app.after_request
+def after_request(response):
+    """
+    Trigger cleanup of old files after each request.
+    """
+    cleanup_old_files()
+    return response
 
 if __name__ == '__main__':
     app.run(debug=True)
