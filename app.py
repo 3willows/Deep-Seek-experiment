@@ -12,9 +12,25 @@ app = Flask(__name__)
 
 # Preload public holidays into a set for faster lookup
 PUBLIC_HOLIDAYS = set([
-    "2023-01-01", "2023-02-12", "2023-04-07",
-    "2023-05-01", "2023-07-01", "2023-10-01", "2023-12-25"
+    "2025-01-01",  # The first day of January
+    "2025-01-29",  # Lunar New Year's Day
+    "2025-01-30",  # The second day of Lunar New Year
+    "2025-01-31",  # The third day of Lunar New Year
+    "2025-04-04",  # Ching Ming Festival
+    "2025-04-18",  # Good Friday
+    "2025-04-19",  # The day following Good Friday
+    "2025-04-21",  # Easter Monday
+    "2025-05-01",  # Labour Day
+    "2025-05-05",  # The Birthday of the Buddha
+    "2025-05-31",  # Tuen Ng Festival
+    "2025-07-01",  # Hong Kong Special Administrative Region Establishment Day
+    "2025-10-01",  # National Day
+    "2025-10-07",  # The day following the Chinese Mid-Autumn Festival
+    "2025-10-29",  # Chung Yeung Festival
+    "2025-12-25",  # Christmas Day
+    "2025-12-26",  # The first weekday after Christmas Day
 ])
+
 
 def is_weekend(date):
     return date.weekday() >= 5
