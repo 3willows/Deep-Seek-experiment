@@ -1,8 +1,8 @@
 # About
 
-Trying out DeepSeek
+Trying out Deep Seek: [write-up](https://programming-blog.3willows.xyz/post/2025-01-27-deep-seek/)
 
-## To do:
+## Potential areas of improvement:
 
 - Use an API to find all the public holidays, don't hard code it.
 - Add tests
