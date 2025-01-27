@@ -53,13 +53,26 @@ def calculate_filing_deadline(hearing_date, hours_before):
     return current_date
 
 def cleanup_old_files():
-    """ Asynchronous cleanup would be better here in production. """
+    """
+    Remove files older than an hour from the 'static' folder, 
+    skipping 'styles.css'. Asynchronous cleanup is recommended for production.
+    """
     static_folder = os.path.join(app.root_path, 'static')
     now = time.time()
-    for filename in os.listdir(static_folder):
-        file_path = os.path.join(static_folder, filename)
-        if os.path.isfile(file_path) and now - os.path.getmtime(file_path) > 3600:
-            os.remove(file_path)
+    excluded_files = {'styles.css'}
+
+    try:
+        for filename in os.listdir(static_folder):
+            if filename in excluded_files:
+                continue
+
+            file_path = os.path.join(static_folder, filename)
+            if os.path.isfile(file_path) and now - os.path.getmtime(file_path) > 3600:
+                os.remove(file_path)
+
+    except Exception as e:
+        # Log the exception for debugging
+        print(f"Error during cleanup: {e}")
 
 def generate_calendar_image(hearing_date, filing_deadline):
     # Optimized calendar generation
@@ -135,5 +148,9 @@ def after_request(response):
     cleanup_old_files()
     return response
 
+# For running locally
+# if __name__ == '__main__':
+#     app.run(debug=True)
+
 if __name__ == '__main__':
-    app.run(debug=False, host='0.0.0.0', port=5000)
+    app.run(debug=True, host='0.0.0.0', port=5000)
